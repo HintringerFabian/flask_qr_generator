@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="../static/index.css">
+</head>
+<body>
+    <h1>QR Code Generator</h1>
+
+    <form action="/qr" method="POST" id="qrForm">
+        <label for="url">Enter URL:</label>
+        <input type="text" id="url" name="url" required>
+
+        <label for="background">Select Background:</label>
+        <select id="background" name="background">
+            <option value="white">White Background</option>
+            <option value="transparent">Transparent Background</option>
+        </select>
+
+        <button type="submit">Generate</button>
+    </form>
+</body>
+</html>

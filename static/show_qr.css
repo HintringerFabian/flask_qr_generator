@@ -1,0 +1,67 @@
+body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+form {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+button {
+    background-color: #87CEEB;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px; /* Rounded edges */
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #4682b4;
+}
+
+img {
+    margin-top: 20px;
+    max-width: 100%;
+}
+
+.btn-container {
+    margin-top: 20px;
+}
+
+.clear-btn,
+.download-btn {
+    background-color: #87CEEB;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 8px; /* Rounded edges */
+    transition: background-color 0.3s ease;
+}
+
+.clear-btn:hover,
+.download-btn:hover {
+    background-color: #4682b4;
+}
