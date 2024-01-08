@@ -1,9 +1,5 @@
-import base64
-import io
-
 from flask import Flask, render_template, request, Response
-
-from qr_code import generate_qr_code, encode_base64_in_memory
+from qr_code import generate_qr_code, encode_base64_in_memory, decode_base64
 
 app = Flask(__name__)
 
@@ -32,7 +28,7 @@ def download():
     img_data = request.form.get('img_data')
 
     img_data = img_data.encode('utf-8')
-    img_data = base64.b64decode(img_data)
+    img_data = decode_base64(img_data)
 
     response = Response(img_data, mimetype="image/png")
     response.headers["Content-Disposition"] = "attachment; filename=qr.png"

@@ -26,3 +26,8 @@ def encode_base64_in_memory(qr):
     qr.save(img_data, "PNG")
     encoded_img_data = base64.b64encode(img_data.getvalue())
     return encoded_img_data
+
+
+def decode_base64(data):
+    img_data = base64.b64decode(data)
+    return img_data
