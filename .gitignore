@@ -935,3 +935,4 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,pycharm+iml,pycharm+all,linux,visualstudiocode,visualstudio,windows,flask
+qr.db
