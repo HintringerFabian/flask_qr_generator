@@ -4,8 +4,9 @@ LABEL authors="fabianhintringer"
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install -r /tmp/requirements.txt
 
-COPY . /app
 WORKDIR /app
+RUN mkdir /database
+COPY . .
 
 EXPOSE 5000
 
