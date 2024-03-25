@@ -1,9 +1,10 @@
 import os
+import threading
 
 from flask import Flask, render_template, request, Response, redirect
 
-from database import init_db_if_not_exists, find_data_by_uuid, increase_count
-from qr_generator import QRGenerator, generate_qr_code, encode_base64_in_memory, decode_base64
+from database import init_db_if_not_exists, find_data_by_uuid, increase_qr_clicked_count
+from qr_generator import QRGenerator
 
 app = Flask(__name__)
 
@@ -12,8 +13,10 @@ DOMAIN: str | None = os.getenv("DOMAIN")
 DATABASE_NAME: str | None = os.getenv("DATABASE_NAME")
 
 # TODO: delete - testing purposes
-# DOMAIN = "http://localhost:5000/"
-# DATABASE_NAME = "qr.db"
+#DOMAIN = "http://localhost:5000/"
+#DATABASE_NAME = "qr.db"
+
+DATABASE_NAME = "/database/"+DATABASE_NAME
 
 init_db = init_db_if_not_exists(DATABASE_NAME)
 
@@ -21,7 +24,7 @@ qr_gen = QRGenerator(DOMAIN, DATABASE_NAME)
 
 
 @app.route('/')
-def index():  # put application's code here
+def index():
     return render_template("./index.html")
 
 
@@ -35,9 +38,9 @@ def generate_qr():
     # the qr_data, will then be turned into the qr code
     qr_data = qr_gen.generate_qr_code_data(data)
 
-    qr = generate_qr_code(qr_data, back_color=back_color)
+    qr = qr_gen.generate_qr_code(qr_data, back_color=back_color)
 
-    encoded_img_data = encode_base64_in_memory(qr)
+    encoded_img_data = qr_gen.encode_base64_in_memory(qr)
     utf8_img_data = encoded_img_data.decode("utf-8")
 
     return render_template("./show_qr.html", url_name=data, img_data=utf8_img_data)
@@ -49,18 +52,13 @@ def download():
     img_data = request.form.get('img_data')
 
     img_data = img_data.encode('utf-8')
-    img_data = decode_base64(img_data)
+    img_data = qr_gen.decode_base64(img_data)
 
     response = Response(img_data, mimetype="image/png")
     response.headers["Content-Disposition"] = "attachment; filename=qr.png"
 
     # Return the response for download
     return response
-
-
-def redirect_to_saved_url(url_data, uuid):
-    increase_count(uuid, DATABASE_NAME)
-    return redirect(url_data)
 
 
 @app.route('/<uuid>')
@@ -73,8 +71,13 @@ def redirect_by_uuid(uuid):
         # TODO: change to 404 page
         return "404"
 
-    return redirect_to_saved_url(url_data, uuid)
+    # Start a new thread to update the count without waiting for it to complete
+    threading.Thread(target=increase_qr_clicked_count, args=(uuid, DATABASE_NAME)).start()
+
+    return redirect(url_data)
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
+    # TODO: make this code save for production
+    # TODO: how much traffic can the server handle?

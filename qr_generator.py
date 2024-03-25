@@ -56,11 +56,12 @@ class QRGenerator:
         return img_data
 
     @staticmethod
-    def encode_base64_in_memory(qr):
+    def encode_base64_in_memory(qr) -> bytes:
         img_data = io.BytesIO()
+
         qr.save(img_data, "PNG")
-        encoded_img_data = base64.b64encode(img_data.getvalue())
-        return encoded_img_data
+
+        return base64.b64encode(img_data.getvalue())
 
     @staticmethod
     def generate_qr_code(data, back_color: str = "white"):
@@ -82,10 +83,11 @@ class QRGenerator:
         match domain_status:
             case DomainStatus.NO_DOMAIN:
                 raise ValueError("No domain was provided")
-            case DomainStatus.HTTP_NOT_SUPPORTED:
-                raise ValueError("Only HTTPS is supported")
-            case DomainStatus.DOMAIN_MALFORMED:
-                raise ValueError("The domain is malformed")
+# TODO: reenable after testing
+#            case DomainStatus.HTTP_NOT_SUPPORTED:
+#                raise ValueError("Only HTTPS is supported")
+#            case DomainStatus.DOMAIN_MALFORMED:
+#                raise ValueError("The domain is malformed")
             case DomainStatus.TRAILING_SLASH:
                 raise ValueError("The domain should not end with a trailing slash")
 

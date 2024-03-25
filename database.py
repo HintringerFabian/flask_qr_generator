@@ -24,7 +24,6 @@ def init_db_if_not_exists(db_name: str):
     # Connect to the SQLite database (this will create the database file if it does not exist)
 
     with get_database_connection(db_name) as conn, get_cursor(conn) as cursor:
-
         # SQL statement to create a table if it does not exist
         create_table_sql = """
             CREATE TABLE IF NOT EXISTS uuid_mappings (
@@ -44,7 +43,6 @@ def init_db_if_not_exists(db_name: str):
 def save_to_db(uuid, url_data, db_name):
     with get_database_connection(db_name) as conn, get_cursor(conn) as cursor:
 
-        # SQL statement to insert a new row into the table
         insert_sql = """
             INSERT INTO uuid_mappings (UUID, URL_DATA, COUNT)
             VALUES (?, ?, ?);
@@ -77,7 +75,8 @@ def find_data_by_uuid(uuid, db_name) -> str | None:
         return result[0] if result else None
 
 
-def increase_count(uuid, db_name):
+def increase_qr_clicked_count(uuid, db_name):
+    # as we started a new thread, we need to lock the code
     with lock:
         # The code inside this block is now thread-safe and ensures that the SQL
         # operation is executed only once at a time across threads.
